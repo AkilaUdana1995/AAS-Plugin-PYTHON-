@@ -58,7 +58,7 @@ def virtual_makeup(image, color, alpha):
     return result
 
 # Load an image
-image = cv2.imread('Assets\images\sample4.jpg')
+image = cv2.imread('Assets\images\kid.jpg')
 
 # Apply virtual makeup with blue color and 0.7 alpha
 result = virtual_makeup(image, (255, 0, 0), 0.7)

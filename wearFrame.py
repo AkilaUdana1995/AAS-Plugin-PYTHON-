@@ -6,15 +6,20 @@ import imutils
 import cv2
 import numpy as np
 
-face_cascade = cv2.CascadeClassifier('Assets\Haarcascadefiles\haarcascade_frontalface_alt.xml')
-eye_cascade = cv2.CascadeClassifier('Assets\Haarcascadefiles\haarcascade_eye.xml')
+# haarcade classifiers for detect face and eyes
+face_cascade = cv2.CascadeClassifier(
+    'Assets\Haarcascadefiles\haarcascade_frontalface_alt.xml')
+eye_cascade = cv2.CascadeClassifier(
+    'Assets\Haarcascadefiles\haarcascade_eye.xml')
 
 # read both the images of the face and the glasses
-image = cv2.imread('Assets\images\sample4.jpg')
+image = cv2.imread('Assets\images\kid.jpg')
 glass_img = cv2.imread('Assets\images\glass.png')
 
+# convert image into gray scale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
+# detect the faces in gray scale image
 centers = []
 faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
@@ -37,7 +42,8 @@ if len(centers) > 0:
     h, w = glass_img.shape[:2]
     scaling_factor = glasses_width / w
 
-    overlay_glasses = cv2.resize(glass_img, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
+    overlay_glasses = cv2.resize(
+        glass_img, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
 
     x = centers[0][0] if centers[0][0] < centers[1][0] else centers[1][0]
 
@@ -58,7 +64,9 @@ if len(centers) > 0:
     temp2 = cv2.bitwise_and(overlay_img, overlay_img, mask=mask_inv)
     final_img = cv2.add(temp, temp2)
 
-    # imS = cv2.resize(final_img, (1366, 768))
-    cv2.imshow('Lets wear a frame!', final_img)
+
+# Show the original image and the final image with the glasses overlay at the same time
+    combined_img = np.hstack((image, final_img))
+    cv2.imshow('Original Image (Left) and Glasses Overlay (Right)', combined_img)
     cv2.waitKey()
     cv2.destroyAllWindows()
