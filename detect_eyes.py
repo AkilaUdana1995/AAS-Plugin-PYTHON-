@@ -5,7 +5,7 @@ import imutils
 from imutils import face_utils
 
 import cv2
-image = cv2.imread('Assets\images\kid.jpg')
+image = cv2.imread('Assets\images\sample11.jpg')
 classifier =cv2. CascadeClassifier('Assets\Haarcascadefiles\haarcascade_eye_tree_eyeglasses.xml')
 boxes = classifier.detectMultiScale(image)
 for box in boxes:

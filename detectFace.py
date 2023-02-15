@@ -1,16 +1,9 @@
 import cv2
 import numpy as np
 import dlib
-import imutils
 from imutils import face_utils
 import matplotlib.pyplot as plt 
 #%matplotlib inline
-
-
-
-
-import cv2
-import numpy as np
 
 # Load the cascade classifier for face detection
 face_cascade = cv2.CascadeClassifier('Assets\Haarcascadefiles\haarcascade_frontalface_default.xml')
@@ -58,7 +51,7 @@ def virtual_makeup(image, color, alpha):
     return result
 
 # Load an image
-image = cv2.imread('Assets\images\kid.jpg')
+image = cv2.imread('Assets\images\sample11.jpg')
 
 # Apply virtual makeup with blue color and 0.7 alpha
 result = virtual_makeup(image, (255, 0, 0), 0.7)

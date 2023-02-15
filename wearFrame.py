@@ -1,10 +1,6 @@
 import cv2
-import dlib
 import numpy as np
-import imutils
 
-import cv2
-import numpy as np
 
 # haarcade classifiers for detect face and eyes
 face_cascade = cv2.CascadeClassifier(
@@ -12,8 +8,15 @@ face_cascade = cv2.CascadeClassifier(
 eye_cascade = cv2.CascadeClassifier(
     'Assets\Haarcascadefiles\haarcascade_eye.xml')
 
+#error handelling 
+if face_cascade.empty():
+  raise IOError('Unable to load the face cascade classifier xml file')
+
+if eye_cascade.empty():
+ raise IOError('Unable to load the eye cascade classifier xml file')
+
 # read both the images of the face and the glasses
-image = cv2.imread('Assets\images\kid.jpg')
+image = cv2.imread('Assets\images\sample4.jpg')
 glass_img = cv2.imread('Assets\images\glass.png')
 
 # convert image into gray scale
