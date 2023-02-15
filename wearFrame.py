@@ -10,14 +10,17 @@ eye_cascade = cv2.CascadeClassifier(
 
 #error handelling 
 if face_cascade.empty():
+  #print("Unable to load the face cascade classifier xml file")
   raise IOError('Unable to load the face cascade classifier xml file')
 
 if eye_cascade.empty():
  raise IOError('Unable to load the eye cascade classifier xml file')
 
 # read both the images of the face and the glasses
-image = cv2.imread('Assets\images\sample4.jpg')
-glass_img = cv2.imread('Assets\images\glass.png')
+image = cv2.imread('Assets\images\sample images\sample4.jpg')
+#glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
+glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
+
 
 # convert image into gray scale
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
