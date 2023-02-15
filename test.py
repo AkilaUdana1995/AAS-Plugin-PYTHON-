@@ -48,7 +48,7 @@ detector = dlib.get_frontal_face_detector()
 # Dlib Face Feature Point Prediction
 predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 
-img_rd = cv2.imread("Assets\images\girl.png")
+img_rd = cv2.imread("Assets\images\sample images\girl.png")
 
 img_gray = cv2.cvtColor(img_rd, cv2.COLOR_RGB2GRAY)
 

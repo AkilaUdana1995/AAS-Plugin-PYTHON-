@@ -8,18 +8,18 @@ face_cascade = cv2.CascadeClassifier(
 eye_cascade = cv2.CascadeClassifier(
     'Assets\Haarcascadefiles\haarcascade_eye.xml')
 
-#error handelling 
+# error handelling
 if face_cascade.empty():
-  #print("Unable to load the face cascade classifier xml file")
-  raise IOError('Unable to load the face cascade classifier xml file')
+    # print("Unable to load the face cascade classifier xml file")
+    raise IOError('Unable to load the face cascade classifier xml file')
 
 if eye_cascade.empty():
- raise IOError('Unable to load the eye cascade classifier xml file')
+    raise IOError('Unable to load the eye cascade classifier xml file')
 
 # read both the images of the face and the glasses
 image = cv2.imread('Assets\images\sample images\sample4.jpg')
-#glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
-glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
+glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
+# glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
 
 
 # convert image into gray scale
@@ -46,6 +46,7 @@ if len(centers) > 0:
     glasses_width = 2.16 * abs(centers[1][0] - centers[0][0])
     overlay_img = np.ones(image.shape, np.uint8) * 255
     h, w = glass_img.shape[:2]
+    # we can change the glass size on adjusting below (  >>>>  scaling_factor =1.25*glasses_width / w)
     scaling_factor = glasses_width / w
 
     overlay_glasses = cv2.resize(
