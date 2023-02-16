@@ -17,9 +17,12 @@ if eye_cascade.empty():
     raise IOError('Unable to load the eye cascade classifier xml file')
 
 # read both the images of the face and the glasses
+#image = cv2.imread('Assets\images\sample images\Spongebob.png')
 image = cv2.imread('Assets\images\sample images\sample4.jpg')
-glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
-# glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
+
+
+#glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
+glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
 
 
 # convert image into gray scale
@@ -29,8 +32,10 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 centers = []
 faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-# iterating over the face detected
-for (x, y, w, h) in faces:
+
+if len(faces) > 0:
+    # iterating over the face detected
+ for (x, y, w, h) in faces:
 
     # create two Regions of Interest.
     roi_gray = gray[y:y + h, x:x + w]
@@ -41,13 +46,13 @@ for (x, y, w, h) in faces:
     for (ex, ey, ew, eh) in eyes:
         centers.append((x + int(ex + 0.5 * ew), y + int(ey + 0.5 * eh)))
 
-if len(centers) > 0:
+ if len(centers) > 0:
     # change the given value of 2.15 according to the size of the detected face
     glasses_width = 2.16 * abs(centers[1][0] - centers[0][0])
     overlay_img = np.ones(image.shape, np.uint8) * 255
     h, w = glass_img.shape[:2]
     # we can change the glass size on adjusting below (  >>>>  scaling_factor =1.25*glasses_width / w)
-    scaling_factor = glasses_width / w
+    scaling_factor =glasses_width / w
 
     overlay_glasses = cv2.resize(
         glass_img, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
@@ -72,8 +77,10 @@ if len(centers) > 0:
     final_img = cv2.add(temp, temp2)
 
 
-# Show the original image and the final image with the glasses overlay at the same time
+ # Show the original image and the final image with the glasses overlay at the same time
     combined_img = np.hstack((image, final_img))
     cv2.imshow('Original Image (Left) and Glasses Overlay (Right)', combined_img)
     cv2.waitKey()
     cv2.destroyAllWindows()
+else:
+ print("No faces detected.")
