@@ -1,112 +1,121 @@
 import cv2
-import mediapipe as mp
 import numpy as np
-import keyboard
-mp_face_detection = mp.solutions.face_detection
-mp_drawing = mp.solutions.drawing_utils
+import dlib
+from imutils import face_utils
+import matplotlib.pyplot as plt
+# %matplotlib inline
 
-#IMAGE_FILES = ['EM.jpg']
-cap = cv2.VideoCapture(0)
+# Load the cascade classifier for face detection
+face_cascade = cv2.CascadeClassifier(
+    'Assets\Haarcascadefiles\haarcascade_frontalface_default.xml')
+eye_cascade = cv2.CascadeClassifier(
+    'Assets\Haarcascadefiles\haarcascade_eye.xml')
 
-#result = cv2.VideoWriter('filename.avi', 
-#                         cv2.VideoWriter_fourcc(*'MJPG'),
-#                         10, (3840,2160))
-
-with mp_face_detection.FaceDetection(
-    min_detection_confidence=0.5) as face_detection:
-
-  while cap.isOpened() :
-
-    success,image = cap.read()
-    #image = cv2.imread("JB.jpg")
-    imgFront = cv2.imread("Assets\images\sunglasses\glass.png", cv2.IMREAD_UNCHANGED)
-    s_h,s_w,_ = imgFront.shape
+# read both the images of the face and the glasses
+# image = cv2.imread('Assets\images\sample images\Spongebob.png')
+image = cv2.imread('Assets\images\sample images\sample4.jpg')
 
 
-    imageHeight,imageWidth,_ = image.shape
-    # Convert the BGR image to RGB and process it with MediaPipe Face Detection.
-    results = face_detection.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+# glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
+glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
 
-    # Draw face detections of each face.
-    if results.detections:
-      for detection in results.detections:
-        
-        
+# convert image into gray scale
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-        normalizedLandmark = mp_face_detection.get_key_point(detection, mp_face_detection.FaceKeyPoint.NOSE_TIP)
-        pixelCoordinatesLandmark = mp_drawing._normalized_to_pixel_coordinates(normalizedLandmark.x, normalizedLandmark.y, imageWidth, imageHeight)
-        Nose_tip_x = pixelCoordinatesLandmark[0]     # NOSE    
-        Nose_tip_y = pixelCoordinatesLandmark[1]
-        normalizedLandmark = mp_face_detection.get_key_point(detection, mp_face_detection.FaceKeyPoint.LEFT_EAR_TRAGION)
-        pixelCoordinatesLandmark = mp_drawing._normalized_to_pixel_coordinates(normalizedLandmark.x, normalizedLandmark.y, imageWidth, imageHeight)
-        Left_Ear_x = pixelCoordinatesLandmark[0]     # LEFT EAR      
-        Left_Ear_y = pixelCoordinatesLandmark[1]
-        normalizedLandmark = mp_face_detection.get_key_point(detection, mp_face_detection.FaceKeyPoint.RIGHT_EAR_TRAGION)
-        pixelCoordinatesLandmark = mp_drawing._normalized_to_pixel_coordinates(normalizedLandmark.x, normalizedLandmark.y, imageWidth, imageHeight)
-        Right_Ear_x = pixelCoordinatesLandmark[0]    # RIGHT EAR      
-        Right_Ear_y = pixelCoordinatesLandmark[1]
-        normalizedLandmark = mp_face_detection.get_key_point(detection, mp_face_detection.FaceKeyPoint.LEFT_EYE)
-        pixelCoordinatesLandmark = mp_drawing._normalized_to_pixel_coordinates(normalizedLandmark.x, normalizedLandmark.y, imageWidth, imageHeight)
-        Left_EYE_x = pixelCoordinatesLandmark[0]     # LEFT EYE    
-        Left_EYE_y = pixelCoordinatesLandmark[1]
-        normalizedLandmark = mp_face_detection.get_key_point(detection, mp_face_detection.FaceKeyPoint.RIGHT_EYE)
-        pixelCoordinatesLandmark = mp_drawing._normalized_to_pixel_coordinates(normalizedLandmark.x, normalizedLandmark.y, imageWidth, imageHeight)
-        Right_EYE_x = pixelCoordinatesLandmark[0]    # RIGHT EYE    
-        Right_EYE_y = pixelCoordinatesLandmark[1]
+# Load the dlib model for facial landmarks detection
+predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 
-        #mp_drawing.draw_detection(image, detection) # Drawing face landmarks
-        
+# Function to detect facial landmarks
 
-        #print('Left Ear : ',Left_Ear_x,Left_Ear_y)
-        #print('Right Ear : ',Right_Ear_x,Right_Ear_y)
-        #print('Left EYE : ',Left_EYE_x,Left_EYE_y)
-        #print('Right EYE : ',Right_EYE_x,Right_EYE_y)
-        #cv2.circle(image,(Right_EYE_x,Right_EYE_y),10,(0,0,255),1)
 
-        sunglass_width = Left_Ear_x-Right_Ear_x+60
-        sunglass_height = int((s_h/s_w)*sunglass_width)
-        #print('size : ',sunglass_width,sunglass_height)
-        
-        imgFront = cv2.resize(imgFront, (sunglass_width, sunglass_height), None, 0.3, 0.3)
 
-        hf, wf, cf = imgFront.shape
-        hb, wb, cb = image.shape
+def detect_landmarks(image):
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-        #194 > 100   
-        #80 > 60    160/80 * 60
-        y_adjust = int((sunglass_height/80)*80) #adjust value to fine tune
-        x_adjust = int((sunglass_width/194)*100)
+    # Detect faces in the grayscale image
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
-        pos = [Nose_tip_x-x_adjust,Nose_tip_y-y_adjust]
-        #print(hb-hf)
-        #imgResult = cvzone.overlayPNG(imgBack, imgFront, [0, hb-hf])
+    # If no faces are detected, return None
+    if len(faces) == 0:
+        return None
 
-        hf, wf, cf = imgFront.shape
-        hb, wb, cb = image.shape
-        *_, mask = cv2.split(imgFront)
-        maskBGRA = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGRA)
-        maskBGR = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
-        imgRGBA = cv2.bitwise_and(imgFront, maskBGRA)
-        imgRGB = cv2.cvtColor(imgRGBA, cv2.COLOR_BGRA2BGR)
+    # Otherwise, find the facial landmarks for each face
+    face = faces[0]
+    x, y, w, h = face
+    rect = dlib.rectangle(left=x, top=y, right=x + w, bottom=y + h)
+    landmarks = predictor(gray, rect)
+    landmarks = np.array([[p.x, p.y] for p in landmarks.parts()])
 
-        imgMaskFull = np.zeros((hb, wb, cb), np.uint8)
-        imgMaskFull[pos[1]:hf + pos[1], pos[0]:wf + pos[0], :] = imgRGB
-        imgMaskFull2 = np.ones((hb, wb, cb), np.uint8) * 255
-        maskBGRInv = cv2.bitwise_not(maskBGR)
-        imgMaskFull2[pos[1]:hf + pos[1], pos[0]:wf + pos[0], :] = maskBGRInv
+    return landmarks
 
-        image = cv2.bitwise_and(image, imgMaskFull2)
-        image = cv2.bitwise_or(image, imgMaskFull)
-        #cv2.namedWindow("Sunglass Effect",cv2.WINDOW_NORMAL)
-        #image = cv2.resize(image,(540,960))  
-    cv2.imshow('Sunglass Effect',image)
-    #result.write(image)  Write to a file
-        
-        
-    if keyboard.is_pressed('q') :
-        break
+# Function to apply virtual makeup
+def virtual_makeup(image, color, alpha):
+    # Detect the facial landmarks
+    landmarks = detect_landmarks(image)
 
-    cv2.waitKey(5) 
+    # If no landmarks are detected, return the original image
+    if landmarks is None:
+        return image
 
-cap.release()
-cv2.destroyAllWindows()
+    # Otherwise, apply virtual makeup to the landmarks
+    # detect the faces in gray scale image
+centers = []
+faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+
+if len(faces) > 0:
+    # iterating over the face detected
+    for (x, y, w, h) in faces:
+
+        # create two Regions of Interest.
+        roi_gray = gray[y:y + h, x:x + w]
+        roi_color = image[y:y + h, x:x + w]
+        eyes = eye_cascade.detectMultiScale(roi_gray)
+
+        # Store the coordinates of eyes in the image to the 'center' array
+        for (ex, ey, ew, eh) in eyes:
+            centers.append((x + int(ex + 0.5 * ew), y + int(ey + 0.5 * eh)))
+
+    if len(centers) > 0:
+        # change the given value of 2.15 according to the size of the detected face
+        glasses_width = 2.16 * abs(centers[1][0] - centers[0][0])
+        overlay_img = np.ones(image.shape, np.uint8) * 255
+        h, w = glass_img.shape[:2]
+        # we can change the glass size on adjusting below (  >>>>  scaling_factor =1.25*glasses_width / w)
+        scaling_factor = glasses_width / w
+
+        overlay_glasses = cv2.resize(
+            glass_img, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
+
+        x = centers[0][0] if centers[0][0] < centers[1][0] else centers[1][0]
+
+        # The x and y variables below depend upon the size of the detected face.
+        x -= 0.26 * overlay_glasses.shape[1]
+        y += 0.85 * overlay_glasses.shape[0]
+
+        # Slice the height, width of the overlay image.
+        h, w = overlay_glasses.shape[:2]
+
+        # Overlay the glasses on the image
+        overlay_img[int(y):int(y + h), int(x):int(x + w)] = overlay_glasses
+
+        # Create a mask and generate it's inverse.
+        gray_glasses = cv2.cvtColor(overlay_img, cv2.COLOR_BGR2GRAY)
+        ret, mask = cv2.threshold(gray_glasses, 110, 255, cv2.THRESH_BINARY)
+        mask_inv = cv2.bitwise_not(mask)
+        temp = cv2.bitwise_and(image, image, mask=mask)
+
+        temp2 = cv2.bitwise_and(overlay_img, overlay_img, mask=mask_inv)
+        final_img = cv2.add(temp, temp2)
+
+# Show the original image and the final image with the glasses overlay at the same time
+ # Apply virtual makeup with blue color and 0.7 alpha
+        result = virtual_makeup(image, (255, 0, 0), 0.7)
+        combined_img = np.hstack((image, final_img))
+        cv2.imshow(
+            'Original Image (Left) and Glasses Overlay (Right)', combined_img)
+        cv2.waitKey()
+        cv2.destroyAllWindows()
+else:
+    print("No faces detected.")

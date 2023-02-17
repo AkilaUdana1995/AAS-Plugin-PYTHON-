@@ -3,10 +3,8 @@ import numpy as np
 
 
 # haarcade classifiers for detect face and eyes
-face_cascade = cv2.CascadeClassifier(
-    'Assets\Haarcascadefiles\haarcascade_frontalface_alt.xml')
-eye_cascade = cv2.CascadeClassifier(
-    'Assets\Haarcascadefiles\haarcascade_eye.xml')
+face_cascade = cv2.CascadeClassifier('Assets\Haarcascadefiles\haarcascade_frontalface_alt.xml')
+eye_cascade = cv2.CascadeClassifier('Assets\Haarcascadefiles\haarcascade_eye.xml')
 
 # error handelling
 if face_cascade.empty():
@@ -16,9 +14,10 @@ if face_cascade.empty():
 if eye_cascade.empty():
     raise IOError('Unable to load the eye cascade classifier xml file')
 
+
 # read both the images of the face and the glasses
 #image = cv2.imread('Assets\images\sample images\Spongebob.png')
-image = cv2.imread('Assets\images\sample images\sample4.jpg')
+image = cv2.imread('Assets\images\sample images\sample18.jpg')
 
 
 #glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
@@ -65,6 +64,8 @@ if len(faces) > 0:
 
     # Slice the height, width of the overlay image.
     h, w = overlay_glasses.shape[:2]
+
+    # Overlay the glasses on the image
     overlay_img[int(y):int(y + h), int(x):int(x + w)] = overlay_glasses
 
     # Create a mask and generate it's inverse.
