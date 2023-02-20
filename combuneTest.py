@@ -41,6 +41,7 @@ while image is None:
     file_path = filedialog.askopenfilename()
     if file_path:
         image = cv2.imread(file_path)
+        
     else:
         raise ValueError('No image selected')
     cv2.imshow('Press "O" to reselect, press "X" to continue', image)
@@ -54,6 +55,15 @@ cv2.destroyAllWindows()
 
 #glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
 glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
+
+# set the maximum size for the image to be processed
+max_size = 800
+
+# resize image if it is larger than the maximum size
+if image.shape[0] > max_size or image.shape[1] > max_size:
+    scale_factor = max_size / max(image.shape[0], image.shape[1])
+    image = cv2.resize(image, (0, 0), fx=scale_factor, fy=scale_factor)
+
 
 
 # convert image into gray scale
