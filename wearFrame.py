@@ -1,6 +1,16 @@
 import cv2
 import numpy as np
+#this import is used to file load dynamically
+import tkinter as tk
+from tkinter import filedialog
 
+
+
+
+
+# Create a Tkinter window
+root = tk.Tk()
+root.withdraw()
 
 # haarcade classifiers for detect face and eyes
 face_cascade = cv2.CascadeClassifier('Assets\Haarcascadefiles\haarcascade_frontalface_alt.xml')
@@ -15,9 +25,31 @@ if eye_cascade.empty():
     raise IOError('Unable to load the eye cascade classifier xml file')
 
 
-# read both the images of the face and the glasses
+# read both the images of the face and the glasses(by hard coding)
 #image = cv2.imread('Assets\images\sample images\Spongebob.png')
-image = cv2.imread('Assets\images\sample images\sample18.jpg')
+#image = cv2.imread('Assets\images\sample images\sample18.jpg')
+
+# Load the selected image file
+print("Press 'o' to select an image again.")
+print("Press 'x' to continue with the selected image.")
+
+image =None
+while image is None:
+    file_path = filedialog.askopenfilename()
+    if file_path:
+        image = cv2.imread(file_path)
+    else:
+        raise ValueError('No image selected')
+    cv2.imshow('Press "O" to reselect, Press "X" to continue', image)
+    k = cv2.waitKey(0) & 0xFF
+    if k == ord('x'):
+        break
+    else:
+        image = None
+
+cv2.destroyAllWindows()
+
+
 
 
 #glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
