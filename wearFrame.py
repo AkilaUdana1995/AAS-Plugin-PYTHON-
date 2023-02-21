@@ -3,11 +3,6 @@ import numpy as np
 #this import is used to file load dynamically
 import tkinter as tk
 from tkinter import filedialog
-
-
-
-
-
 # Create a Tkinter window
 root = tk.Tk()
 root.withdraw()

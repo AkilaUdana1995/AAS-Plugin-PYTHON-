@@ -6,6 +6,9 @@ import numpy as np
 import tkinter as tk
 from tkinter import filedialog
 
+from PIL import Image
+import os
+
 # Create a Tkinter window
 root = tk.Tk()
 root.withdraw()
@@ -51,10 +54,30 @@ while image is None:
     else:
         image = None
 
+#glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
+#glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
+
+
+# Path to the glasses folder
+glasses_path = "Assets\images\sunglasses"
+
+# Get a list of all image files in the glasses folder
+image_files = [os.path.join(glasses_path, f) for f in os.listdir(glasses_path) if os.path.isfile(os.path.join(glasses_path, f)) and f.lower().endswith((".png", ".jpg", ".jpeg"))]
+
+# Display the list of image files to the user
+print("Select a glass:")
+for i, f in enumerate(image_files):
+    print(f"{i+1}. {os.path.basename(f)}")
+
+# Ask the user to select an image
+selected_index = int(input("Enter the index of the glass you want to use: ")) - 1
+selected_file = image_files[selected_index]
+
+# Load the selected image file
+glass_img = cv2.imread(selected_file)
+
 cv2.destroyAllWindows()
 
-#glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
-glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
 
 # set the maximum size for the image to be processed
 max_size = 800
