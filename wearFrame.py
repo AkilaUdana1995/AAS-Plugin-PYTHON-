@@ -48,7 +48,7 @@ cv2.destroyAllWindows()
 
 
 #glass_img = cv2.imread('Assets\images\sunglasses\greenGlass.png')
-glass_img = cv2.imread('Assets\images\sunglasses\glass.png')
+glass_img = cv2.imread('Assets\images\sunglasses\glassDefault.png')
 
 
 # convert image into gray scale

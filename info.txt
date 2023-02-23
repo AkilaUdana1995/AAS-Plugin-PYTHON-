@@ -1,0 +1,26 @@
+index...
+
+DetectFace.py
+This is python file that has capability of detect face in given image, (All completre facial landmarks)
+for now image is loaded by hardcoding..
+
+
+Detect_eyes.py
+This is python file specilally detect eyes then draw square around detected eyes..
+
+
+WearFrame.py
+Main file that detect face and put sunglasses of any image, here image can be loaded by the user at any number of times.
+
+End user can load any image as per their choice,
+
+if user need to reselect an image, need to press "O", once they confirm need to press "X" to continue...
+after pressing "X", programe will recognize eyes and put a frame.......
+(here frame is loaded by hard coding)
+
+CombuneTest.py
+This file also has same functionality like wearframe.py.
+
+but, here frames are not loading by hardcoded, here we can store any number frames in specific location(inside folder or linking to GUI). Then user can choose frame from that list.
+once they selecy both image and frmae code will be executed.....
+
