@@ -22,5 +22,5 @@ CombuneTest.py
 This file also has same functionality like wearframe.py.
 
 but, here frames are not loading by hardcoded, here we can store any number frames in specific location(inside folder or linking to GUI). Then user can choose frame from that list.
-once they selecy both image and frmae code will be executed.....
+once they select both image and frmae code will be executed.....
 
